@@ -1,4 +1,4 @@
-use std::{fs::{self, DirEntry, ReadDir}, io, path::PathBuf};
+use std::{fs::{self}, io, path::PathBuf};
 
 fn dir_size(path: impl Into<PathBuf>) -> io::Result<u64> {
     fn dir_size(mut dir: fs::ReadDir) -> io::Result<u64> {
@@ -11,14 +11,7 @@ fn dir_size(path: impl Into<PathBuf>) -> io::Result<u64> {
             Ok(acc + size)
         })
     }
-    let potential_dir = fs::read_dir(&path.into())?;
-
-    match &potential_dir {
-        ReadDir => {
-            dir_size(potential_dir)
-        }
-        _ => Ok(0)
-    }
+    dir_size(fs::read_dir(&path.into())?)
 }
 
 fn main() -> io::Result<()>{

@@ -20,11 +20,10 @@ impl FileManager {
     }
 
     pub fn process(&self) -> Result<()>{
-        let point = match self.env.check_args() {
+        let point = match self.env.check_args(1) {
             Ok(start) => start,
             Err(e) => return Err(e)
         };
-        //TODO: state machine
         self.display(point);
         Ok(())
         

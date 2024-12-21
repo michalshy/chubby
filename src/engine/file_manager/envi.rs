@@ -11,8 +11,11 @@ impl EnvProcessor {
             args
         }
     }
-    pub fn check_args(&self) -> Result<String> {
-        Ok("./".into())
+    pub fn check_args(&self, index: usize) -> Result<String> {
+        match self.args.get(index) {
+            Some(x) => Ok(x.to_string()),
+            None => Err("No argument found".to_string())
+        }
     }
 
 }

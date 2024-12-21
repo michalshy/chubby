@@ -1,13 +1,11 @@
 use std::{fs::{self}, io, path::PathBuf};
-pub struct Searcher;
 
-impl Searcher {
-    pub fn new() -> Searcher {
-        Searcher
-    }
+pub struct Bag;
 
-    pub fn process_env(&self) -> String {
-        "dupa".into()
+impl Bag {
+    
+    pub fn new() -> Bag {
+        Bag 
     }
 
     pub fn list(&self, path: impl Into<PathBuf>) -> io::Result<u64> {

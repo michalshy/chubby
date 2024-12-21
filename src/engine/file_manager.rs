@@ -1,33 +1,39 @@
-mod searcher;
-use searcher::Searcher;
-use std::fs::{self};
-
+mod bag;
+mod envi;
+use bag::Bag;
+use envi::EnvProcessor;
+use crate::common::Result;
 
 pub struct FileManager {
-    searcher: Searcher,
-    start_point: String
+    bag: Bag,
+    env: EnvProcessor
 }
 
 impl FileManager {
     pub fn new() -> FileManager {
-        let searcher = Searcher::new();
-        let start_point = searcher.process_env();
+        let bag = Bag::new();
+        let env = EnvProcessor::new();
         FileManager {
-            searcher,
-            start_point
+            bag,
+            env
         }
     }
 
-    pub fn process(&self) {
+    pub fn process(&self) -> Result<()>{
+        let point = match self.env.check_args() {
+            Ok(start) => &start,
+            Err(e) => return Err(e)
+        };
         //TODO: state machine
-        self.display();
+        self.display(point);
+        Ok(())
     }
 
-    fn display(&self) { 
-        let paths = fs::read_dir(self.start_point.clone()).unwrap();
-        println!("path checked: {}", self.start_point);
+    fn display(&self, point: &str) { 
+        let paths = fs::read_dir(point.clone()).unwrap();
+        println!("path checked: {}", point);
         for path in paths {
-            if let Ok(x) = self.searcher.list(path.as_ref().unwrap().path()) {
+            if let Ok(x) = self.bag.list(path.as_ref().unwrap().path()) {
                 println!("{}, size: {}", path.unwrap().path().display(), x);
             }
             else {

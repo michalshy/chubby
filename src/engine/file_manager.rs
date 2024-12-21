@@ -1,8 +1,8 @@
+use std::fs;
+use crate::common::Result;
 mod bag;
 mod envi;
-use bag::Bag;
-use envi::EnvProcessor;
-use crate::common::Result;
+use {bag::Bag, envi::EnvProcessor};
 
 pub struct FileManager {
     bag: Bag,
@@ -21,15 +21,16 @@ impl FileManager {
 
     pub fn process(&self) -> Result<()>{
         let point = match self.env.check_args() {
-            Ok(start) => &start,
+            Ok(start) => start,
             Err(e) => return Err(e)
         };
         //TODO: state machine
         self.display(point);
         Ok(())
+        
     }
 
-    fn display(&self, point: &str) { 
+    fn display(&self, point: String) { 
         let paths = fs::read_dir(point.clone()).unwrap();
         println!("path checked: {}", point);
         for path in paths {
